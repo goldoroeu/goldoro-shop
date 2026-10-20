@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import Shop from "@/components/Shop";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const { data: products } = await supabase()
     .from("products")
