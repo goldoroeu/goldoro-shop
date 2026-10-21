@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import IconSprite from "@/components/IconSprite";
+import { fmt, cap } from "@/lib/format";
 
 const CATEGORIES = [
   { key: "гривни", icon: "i-bracelet" },
@@ -12,44 +14,13 @@ const CATEGORIES = [
 
 const CART_KEY = "goldoro_cart_v1";
 
-function fmt(cents) {
-  return (
-    "€" +
-    (cents / 100).toLocaleString("bg-BG", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })
-  );
-}
-
-function cap(s) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
 export default function Shop({ products }) {
   const router = useRouter();
   const [filter, setFilter] = useState("всички");
   const [cart, setCart] = useState({});
-  const [cartOpen, setCartOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [checkingOut, setCheckingOut] = useState(false);
-  const [checkoutError, setCheckoutError] = useState("");
   const [addedId, setAddedId] = useState(null);
   const [subscribeNote, setSubscribeNote] = useState("");
-
-  const [checkoutStep, setCheckoutStep] = useState("cart"); // cart | method | cod
-  const [codForm, setCodForm] = useState({
-    name: "",
-    phone: "",
-    deliveryType: "address",
-    address: "",
-    email: "",
-  });
-  const [codSubmitting, setCodSubmitting] = useState(false);
-  const [codError, setCodError] = useState("");
-
-  const cartPanelRef = useRef(null);
-  const cartBtnRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -68,37 +39,12 @@ export default function Shop({ products }) {
     }
   }, [cart]);
 
-  useEffect(() => {
-    function handleClick(e) {
-      if (
-        cartPanelRef.current &&
-        !cartPanelRef.current.contains(e.target) &&
-        cartBtnRef.current &&
-        !cartBtnRef.current.contains(e.target)
-      ) {
-        setCartOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
   const visibleProducts = useMemo(
     () => (filter === "всички" ? products : products.filter((p) => p.category === filter)),
     [filter, products]
   );
 
-  const cartLines = useMemo(
-    () =>
-      Object.entries(cart)
-        .filter(([, qty]) => qty > 0)
-        .map(([id, qty]) => ({ product: products.find((p) => p.id === id), qty }))
-        .filter((l) => l.product),
-    [cart, products]
-  );
-
-  const cartCount = cartLines.reduce((sum, l) => sum + l.qty, 0);
-  const cartTotalCents = cartLines.reduce((sum, l) => sum + l.product.price_cents * l.qty, 0);
+  const cartCount = useMemo(() => Object.values(cart).reduce((sum, qty) => sum + qty, 0), [cart]);
 
   function addToCart(id) {
     setCart((c) => ({ ...c, [id]: (c[id] || 0) + 1 }));
@@ -106,82 +52,9 @@ export default function Shop({ products }) {
     setTimeout(() => setAddedId((cur) => (cur === id ? null : cur)), 1100);
   }
 
-  function removeFromCart(id) {
-    setCart((c) => {
-      const next = { ...c };
-      if (next[id] > 1) next[id] -= 1;
-      else delete next[id];
-      return next;
-    });
-  }
-
   function selectCategory(key) {
     setFilter(key);
     document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  async function handleCheckout() {
-    if (cartLines.length === 0) return;
-    setCheckingOut(true);
-    setCheckoutError("");
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: cartLines.map((l) => ({ id: l.product.id, qty: l.qty })),
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.url) {
-        throw new Error(data.error || "Грешка при създаване на поръчката.");
-      }
-      window.location.href = data.url;
-    } catch (err) {
-      setCheckoutError(err.message || "Грешка при създаване на поръчката.");
-      setCheckingOut(false);
-    }
-  }
-
-  function updateCodField(field, value) {
-    setCodForm((f) => ({ ...f, [field]: value }));
-  }
-
-  async function handleCodSubmit(e) {
-    e.preventDefault();
-    if (cartLines.length === 0) return;
-    setCodSubmitting(true);
-    setCodError("");
-    try {
-      const res = await fetch("/api/orders/cod", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: cartLines.map((l) => ({ id: l.product.id, qty: l.qty })),
-          customer: codForm,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Грешка при изпращане на поръчката.");
-      }
-      setCart({});
-      setCartOpen(false);
-      setCheckoutStep("cart");
-      router.push("/checkout/cod-success");
-    } catch (err) {
-      setCodError(err.message || "Грешка при изпращане на поръчката.");
-    } finally {
-      setCodSubmitting(false);
-    }
-  }
-
-  function openCartPanel() {
-    setCartOpen((o) => {
-      const next = !o;
-      if (next) setCheckoutStep("cart");
-      return next;
-    });
   }
 
   function handleSubscribe(e) {
@@ -192,69 +65,7 @@ export default function Shop({ products }) {
 
   return (
     <>
-      <svg className="sprite" aria-hidden="true">
-        <symbol id="i-ring" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <circle cx="12" cy="14.5" r="7" />
-          <path d="M9.3 8.2 12 3.6l2.7 4.6-2.7 1.4Z" fill="currentColor" stroke="none" />
-        </symbol>
-        <symbol id="i-bracelet" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <ellipse cx="12" cy="12" rx="9" ry="5.6" />
-          <circle cx="3.2" cy="12" r="1" fill="currentColor" stroke="none" />
-          <circle cx="20.8" cy="12" r="1" fill="currentColor" stroke="none" />
-          <circle cx="6" cy="18.4" r="1" fill="currentColor" stroke="none" />
-          <circle cx="18" cy="18.4" r="1" fill="currentColor" stroke="none" />
-          <circle cx="6" cy="5.6" r="1" fill="currentColor" stroke="none" />
-          <circle cx="18" cy="5.6" r="1" fill="currentColor" stroke="none" />
-        </symbol>
-        <symbol id="i-chain" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <ellipse cx="7" cy="9" rx="3.4" ry="5" transform="rotate(20 7 9)" />
-          <ellipse cx="13" cy="12" rx="3.4" ry="5" transform="rotate(-20 13 12)" />
-          <ellipse cx="19" cy="15" rx="3.4" ry="5" transform="rotate(20 19 15)" />
-        </symbol>
-        <symbol id="i-earring" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <circle cx="12" cy="6" r="3.2" />
-          <line x1="12" y1="9.2" x2="12" y2="13.5" />
-          <path d="M12 13.5c-2.6 0-3.6 2-3 3.8.5 1.5 2 2.5 3 2.5s2.5-1 3-2.5c.6-1.8-.4-3.8-3-3.8Z" />
-        </symbol>
-        <symbol id="i-logo" viewBox="0 0 32 32" fill="none" stroke="currentColor">
-          <circle cx="16" cy="18" r="11" strokeWidth="1.6" />
-          <circle cx="16" cy="18" r="7.2" strokeWidth="1.3" />
-          <path d="M16 3.5 19 9h-6Z" fill="currentColor" stroke="none" />
-        </symbol>
-        <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <rect x="3" y="5.5" width="18" height="13" rx="2" />
-          <line x1="3" y1="9.5" x2="21" y2="9.5" />
-          <line x1="6" y1="14.5" x2="11" y2="14.5" />
-        </symbol>
-        <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M3 4h2l2.4 12.2a2 2 0 0 0 2 1.6h7.4a2 2 0 0 0 2-1.6L20.5 8H6" />
-          <circle cx="9" cy="20.5" r="1.3" fill="currentColor" stroke="none" />
-          <circle cx="17" cy="20.5" r="1.3" fill="currentColor" stroke="none" />
-        </symbol>
-        <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M4 12.5 9 17.5 20 6.5" strokeLinecap="round" strokeLinejoin="round" />
-        </symbol>
-        <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M12 3 20 6.5v5.4C20 17 16.6 20 12 21.5 7.4 20 4 17 4 11.9V6.5Z" />
-          <path d="M9 12.3 11.3 14.6 15.5 9.8" strokeLinecap="round" strokeLinejoin="round" />
-        </symbol>
-        <symbol id="i-hammer" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="m4 20 7-7" strokeLinecap="round" />
-          <path d="M9.5 14.5 7 12l5.5-5.5a3 3 0 0 1 4.2 0l.8.8a3 3 0 0 1 0 4.2L12 16Z" />
-        </symbol>
-        <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M3 6h10v9H3Z" />
-          <path d="M13 10h4l4 3.4V15h-8Z" />
-          <circle cx="7" cy="18" r="1.6" fill="currentColor" stroke="none" />
-          <circle cx="17" cy="18" r="1.6" fill="currentColor" stroke="none" />
-        </symbol>
-        <symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M12 3v5M12 16v5M3 12h5M16 12h5" strokeLinecap="round" />
-        </symbol>
-        <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
-        </symbol>
-      </svg>
+      <IconSprite />
 
       <header className="nav">
         <div className="wrap nav-row">
@@ -282,175 +93,12 @@ export default function Shop({ products }) {
                 <use href="#i-menu" />
               </svg>
             </button>
-            <button
-              ref={cartBtnRef}
-              className="icon-btn"
-              aria-haspopup="true"
-              aria-expanded={cartOpen}
-              aria-label="Количка"
-              onClick={openCartPanel}
-            >
+            <button className="icon-btn" aria-label="Количка" onClick={() => router.push("/checkout")}>
               <svg>
                 <use href="#i-cart" />
               </svg>
               <span className="cart-badge">{cartCount}</span>
             </button>
-            <div ref={cartPanelRef} className={`cart-panel${cartOpen ? " open" : ""}`}>
-              {checkoutStep === "cart" && (
-                <>
-                  <h3>Количка</h3>
-                  <div className="cart-items">
-                    {cartLines.length === 0 ? (
-                      <p className="cart-empty">Количката е празна.</p>
-                    ) : (
-                      cartLines.map((l) => (
-                        <div className="cart-line" key={l.product.id}>
-                          <div className="ci-name">
-                            <strong>{l.product.name}</strong>
-                            <span className="ci-meta">
-                              {l.qty} &times; {fmt(l.product.price_cents)}
-                            </span>
-                          </div>
-                          <button type="button" onClick={() => removeFromCart(l.product.id)} aria-label="Премахни">
-                            &times;
-                          </button>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                  <div className="cart-total">
-                    <span>Общо</span>
-                    <span className="price">{fmt(cartTotalCents)}</span>
-                  </div>
-                  <button
-                    className="btn btn-gold btn-block"
-                    onClick={() => setCheckoutStep("method")}
-                    disabled={cartLines.length === 0}
-                  >
-                    Завърши поръчка
-                  </button>
-                </>
-              )}
-
-              {checkoutStep === "method" && (
-                <>
-                  <button type="button" className="cart-back" onClick={() => setCheckoutStep("cart")}>
-                    &larr; Назад към количката
-                  </button>
-                  <h3>Начин на плащане</h3>
-                  <div className="cart-total" style={{ borderTop: "none", marginTop: 0, paddingTop: 0 }}>
-                    <span>Общо</span>
-                    <span className="price">{fmt(cartTotalCents)}</span>
-                  </div>
-                  <div className="method-options">
-                    <button
-                      type="button"
-                      className="method-option"
-                      onClick={handleCheckout}
-                      disabled={checkingOut}
-                    >
-                      <svg>
-                        <use href="#i-card" />
-                      </svg>
-                      <span>
-                        <strong>{checkingOut ? "Пренасочване…" : "Плащане с карта"}</strong>
-                        <small>Сигурно плащане през Stripe</small>
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      className="method-option"
-                      onClick={() => setCheckoutStep("cod")}
-                    >
-                      <svg>
-                        <use href="#i-truck" />
-                      </svg>
-                      <span>
-                        <strong>Наложен платеж</strong>
-                        <small>Плащане в брой на куриера (Еконт)</small>
-                      </span>
-                    </button>
-                  </div>
-                  {checkoutError && <p className="cart-error">{checkoutError}</p>}
-                </>
-              )}
-
-              {checkoutStep === "cod" && (
-                <form onSubmit={handleCodSubmit}>
-                  <button type="button" className="cart-back" onClick={() => setCheckoutStep("method")}>
-                    &larr; Назад
-                  </button>
-                  <h3>Наложен платеж</h3>
-                  <div className="cart-total" style={{ borderTop: "none", marginTop: 0, paddingTop: 0 }}>
-                    <span>Общо (в брой на куриера)</span>
-                    <span className="price">{fmt(cartTotalCents)}</span>
-                  </div>
-                  <div className="cod-fields">
-                    <label>
-                      Име и фамилия
-                      <input
-                        required
-                        value={codForm.name}
-                        onChange={(e) => updateCodField("name", e.target.value)}
-                      />
-                    </label>
-                    <label>
-                      Телефон
-                      <input
-                        required
-                        type="tel"
-                        placeholder="08xx xxx xxx"
-                        value={codForm.phone}
-                        onChange={(e) => updateCodField("phone", e.target.value)}
-                      />
-                    </label>
-                    <div className="cod-radio-row">
-                      <label className="cod-radio">
-                        <input
-                          type="radio"
-                          name="deliveryType"
-                          checked={codForm.deliveryType === "address"}
-                          onChange={() => updateCodField("deliveryType", "address")}
-                        />
-                        До адрес
-                      </label>
-                      <label className="cod-radio">
-                        <input
-                          type="radio"
-                          name="deliveryType"
-                          checked={codForm.deliveryType === "office"}
-                          onChange={() => updateCodField("deliveryType", "office")}
-                        />
-                        До офис на Еконт
-                      </label>
-                    </div>
-                    <label>
-                      {codForm.deliveryType === "office" ? "Офис на Еконт (град и адрес)" : "Адрес за доставка"}
-                      <input
-                        required
-                        placeholder={
-                          codForm.deliveryType === "office" ? "напр. Варна, офис бул. Владислав Варненчик 1" : "улица, номер, град, пощенски код"
-                        }
-                        value={codForm.address}
-                        onChange={(e) => updateCodField("address", e.target.value)}
-                      />
-                    </label>
-                    <label>
-                      Имейл (по желание)
-                      <input
-                        type="email"
-                        value={codForm.email}
-                        onChange={(e) => updateCodField("email", e.target.value)}
-                      />
-                    </label>
-                  </div>
-                  <button className="btn btn-gold btn-block" type="submit" disabled={codSubmitting}>
-                    {codSubmitting ? "Изпращане…" : "Поръчай с наложен платеж"}
-                  </button>
-                  {codError && <p className="cart-error">{codError}</p>}
-                </form>
-              )}
-            </div>
           </div>
         </div>
       </header>
