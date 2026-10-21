@@ -162,9 +162,20 @@ img {
   letter-spacing: 0.04em;
   color: var(--ink);
   display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.logo-mark {
+  width: 30px;
+  height: 30px;
+  color: var(--gold);
+  flex: none;
+}
+.logo span {
+  display: flex;
   align-items: baseline;
   gap: 8px;
-  white-space: nowrap;
 }
 .logo small {
   font-family: "PT Sans", sans-serif;

@@ -216,6 +216,11 @@ export default function Shop({ products }) {
           <line x1="12" y1="9.2" x2="12" y2="13.5" />
           <path d="M12 13.5c-2.6 0-3.6 2-3 3.8.5 1.5 2 2.5 3 2.5s2.5-1 3-2.5c.6-1.8-.4-3.8-3-3.8Z" />
         </symbol>
+        <symbol id="i-logo" viewBox="0 0 32 32" fill="none" stroke="currentColor">
+          <circle cx="16" cy="18" r="11" strokeWidth="1.6" />
+          <circle cx="16" cy="18" r="7.2" strokeWidth="1.3" />
+          <path d="M16 3.5 19 9h-6Z" fill="currentColor" stroke="none" />
+        </symbol>
         <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
           <rect x="3" y="5.5" width="18" height="13" rx="2" />
           <line x1="3" y1="9.5" x2="21" y2="9.5" />
@@ -254,7 +259,12 @@ export default function Shop({ products }) {
       <header className="nav">
         <div className="wrap nav-row">
           <a className="logo" href="#top">
-            GoldOro<small>Златни бижута</small>
+            <svg className="logo-mark" aria-hidden="true">
+              <use href="#i-logo" />
+            </svg>
+            <span>
+              GoldOro<small>Златни бижута</small>
+            </span>
           </a>
           <nav className={`nav-links${menuOpen ? " open" : ""}`} onClick={() => setMenuOpen(false)}>
             <a href="#categories">Колекции</a>
@@ -681,7 +691,12 @@ export default function Shop({ products }) {
           <div className="foot-grid">
             <div className="foot-brand">
               <a className="logo" href="#top">
-                GoldOro<small>Златни бижута</small>
+                <svg className="logo-mark" aria-hidden="true">
+                  <use href="#i-logo" />
+                </svg>
+                <span>
+                  GoldOro<small>Златни бижута</small>
+                </span>
               </a>
               <p>
                 Онлайн магазин за златни бижута. Проба 585°, 750° и 916°, доставка в цяла ЕС.
