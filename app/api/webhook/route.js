@@ -17,12 +17,24 @@ export async function POST(req) {
     const session = event.data.object;
     const lineItems = await stripe().checkout.sessions.listLineItems(session.id, { limit: 100 });
 
+    const shippingAddress = session.shipping_details?.address;
+    const addressLine = shippingAddress
+      ? [shippingAddress.line1, shippingAddress.line2, shippingAddress.postal_code, shippingAddress.city, shippingAddress.country]
+          .filter(Boolean)
+          .join(", ")
+      : null;
+
     await supabase()
       .from("orders")
       .upsert(
         {
+          payment_method: "card",
+          status: "paid",
           stripe_session_id: session.id,
+          customer_name: session.customer_details?.name || session.shipping_details?.name || null,
           customer_email: session.customer_details?.email || null,
+          customer_phone: session.customer_details?.phone || null,
+          shipping_address: addressLine,
           amount_total: session.amount_total,
           currency: session.currency,
           items: lineItems.data.map((li) => ({

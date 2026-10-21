@@ -1,4 +1,5 @@
 -- Изпълни това в Supabase Dashboard -> SQL Editor -> New query -> Run
+-- (Пълната схема — за чисто нова база. Ако вече имаш база, виж migrations/001_cod_orders.sql)
 
 create extension if not exists pgcrypto;
 
@@ -17,10 +18,16 @@ create table if not exists products (
 
 create table if not exists orders (
   id uuid primary key default gen_random_uuid(),
-  stripe_session_id text unique not null,
+  payment_method text not null default 'card' check (payment_method in ('card', 'cod')),
+  status text not null default 'pending' check (status in ('pending', 'paid', 'shipped', 'cancelled')),
+  stripe_session_id text unique,
+  customer_name text,
   customer_email text,
+  customer_phone text,
+  delivery_type text check (delivery_type in ('address', 'office')),
+  shipping_address text,
   amount_total integer,
-  currency text,
+  currency text default 'eur',
   items jsonb,
   created_at timestamptz not null default now()
 );

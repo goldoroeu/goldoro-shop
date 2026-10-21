@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const CATEGORIES = [
   { key: "гривни", icon: "i-bracelet" },
@@ -26,6 +27,7 @@ function cap(s) {
 }
 
 export default function Shop({ products }) {
+  const router = useRouter();
   const [filter, setFilter] = useState("всички");
   const [cart, setCart] = useState({});
   const [cartOpen, setCartOpen] = useState(false);
@@ -34,6 +36,17 @@ export default function Shop({ products }) {
   const [checkoutError, setCheckoutError] = useState("");
   const [addedId, setAddedId] = useState(null);
   const [subscribeNote, setSubscribeNote] = useState("");
+
+  const [checkoutStep, setCheckoutStep] = useState("cart"); // cart | method | cod
+  const [codForm, setCodForm] = useState({
+    name: "",
+    phone: "",
+    deliveryType: "address",
+    address: "",
+    email: "",
+  });
+  const [codSubmitting, setCodSubmitting] = useState(false);
+  const [codError, setCodError] = useState("");
 
   const cartPanelRef = useRef(null);
   const cartBtnRef = useRef(null);
@@ -130,6 +143,47 @@ export default function Shop({ products }) {
     }
   }
 
+  function updateCodField(field, value) {
+    setCodForm((f) => ({ ...f, [field]: value }));
+  }
+
+  async function handleCodSubmit(e) {
+    e.preventDefault();
+    if (cartLines.length === 0) return;
+    setCodSubmitting(true);
+    setCodError("");
+    try {
+      const res = await fetch("/api/orders/cod", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: cartLines.map((l) => ({ id: l.product.id, qty: l.qty })),
+          customer: codForm,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Грешка при изпращане на поръчката.");
+      }
+      setCart({});
+      setCartOpen(false);
+      setCheckoutStep("cart");
+      router.push("/checkout/cod-success");
+    } catch (err) {
+      setCodError(err.message || "Грешка при изпращане на поръчката.");
+    } finally {
+      setCodSubmitting(false);
+    }
+  }
+
+  function openCartPanel() {
+    setCartOpen((o) => {
+      const next = !o;
+      if (next) setCheckoutStep("cart");
+      return next;
+    });
+  }
+
   function handleSubscribe(e) {
     e.preventDefault();
     setSubscribeNote("Абонирахте се успешно. Благодарим!");
@@ -161,6 +215,11 @@ export default function Shop({ products }) {
           <circle cx="12" cy="6" r="3.2" />
           <line x1="12" y1="9.2" x2="12" y2="13.5" />
           <path d="M12 13.5c-2.6 0-3.6 2-3 3.8.5 1.5 2 2.5 3 2.5s2.5-1 3-2.5c.6-1.8-.4-3.8-3-3.8Z" />
+        </symbol>
+        <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+          <rect x="3" y="5.5" width="18" height="13" rx="2" />
+          <line x1="3" y1="9.5" x2="21" y2="9.5" />
+          <line x1="6" y1="14.5" x2="11" y2="14.5" />
         </symbol>
         <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
           <path d="M3 4h2l2.4 12.2a2 2 0 0 0 2 1.6h7.4a2 2 0 0 0 2-1.6L20.5 8H6" />
@@ -220,7 +279,7 @@ export default function Shop({ products }) {
               aria-haspopup="true"
               aria-expanded={cartOpen}
               aria-label="Количка"
-              onClick={() => setCartOpen((o) => !o)}
+              onClick={openCartPanel}
             >
               <svg>
                 <use href="#i-cart" />
@@ -228,38 +287,160 @@ export default function Shop({ products }) {
               <span className="cart-badge">{cartCount}</span>
             </button>
             <div ref={cartPanelRef} className={`cart-panel${cartOpen ? " open" : ""}`}>
-              <h3>Количка</h3>
-              <div className="cart-items">
-                {cartLines.length === 0 ? (
-                  <p className="cart-empty">Количката е празна.</p>
-                ) : (
-                  cartLines.map((l) => (
-                    <div className="cart-line" key={l.product.id}>
-                      <div className="ci-name">
-                        <strong>{l.product.name}</strong>
-                        <span className="ci-meta">
-                          {l.qty} &times; {fmt(l.product.price_cents)}
-                        </span>
-                      </div>
-                      <button type="button" onClick={() => removeFromCart(l.product.id)} aria-label="Премахни">
-                        &times;
-                      </button>
+              {checkoutStep === "cart" && (
+                <>
+                  <h3>Количка</h3>
+                  <div className="cart-items">
+                    {cartLines.length === 0 ? (
+                      <p className="cart-empty">Количката е празна.</p>
+                    ) : (
+                      cartLines.map((l) => (
+                        <div className="cart-line" key={l.product.id}>
+                          <div className="ci-name">
+                            <strong>{l.product.name}</strong>
+                            <span className="ci-meta">
+                              {l.qty} &times; {fmt(l.product.price_cents)}
+                            </span>
+                          </div>
+                          <button type="button" onClick={() => removeFromCart(l.product.id)} aria-label="Премахни">
+                            &times;
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  <div className="cart-total">
+                    <span>Общо</span>
+                    <span className="price">{fmt(cartTotalCents)}</span>
+                  </div>
+                  <button
+                    className="btn btn-gold btn-block"
+                    onClick={() => setCheckoutStep("method")}
+                    disabled={cartLines.length === 0}
+                  >
+                    Завърши поръчка
+                  </button>
+                </>
+              )}
+
+              {checkoutStep === "method" && (
+                <>
+                  <button type="button" className="cart-back" onClick={() => setCheckoutStep("cart")}>
+                    &larr; Назад към количката
+                  </button>
+                  <h3>Начин на плащане</h3>
+                  <div className="cart-total" style={{ borderTop: "none", marginTop: 0, paddingTop: 0 }}>
+                    <span>Общо</span>
+                    <span className="price">{fmt(cartTotalCents)}</span>
+                  </div>
+                  <div className="method-options">
+                    <button
+                      type="button"
+                      className="method-option"
+                      onClick={handleCheckout}
+                      disabled={checkingOut}
+                    >
+                      <svg>
+                        <use href="#i-card" />
+                      </svg>
+                      <span>
+                        <strong>{checkingOut ? "Пренасочване…" : "Плащане с карта"}</strong>
+                        <small>Сигурно плащане през Stripe</small>
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      className="method-option"
+                      onClick={() => setCheckoutStep("cod")}
+                    >
+                      <svg>
+                        <use href="#i-truck" />
+                      </svg>
+                      <span>
+                        <strong>Наложен платеж</strong>
+                        <small>Плащане в брой на куриера (Еконт)</small>
+                      </span>
+                    </button>
+                  </div>
+                  {checkoutError && <p className="cart-error">{checkoutError}</p>}
+                </>
+              )}
+
+              {checkoutStep === "cod" && (
+                <form onSubmit={handleCodSubmit}>
+                  <button type="button" className="cart-back" onClick={() => setCheckoutStep("method")}>
+                    &larr; Назад
+                  </button>
+                  <h3>Наложен платеж</h3>
+                  <div className="cart-total" style={{ borderTop: "none", marginTop: 0, paddingTop: 0 }}>
+                    <span>Общо (в брой на куриера)</span>
+                    <span className="price">{fmt(cartTotalCents)}</span>
+                  </div>
+                  <div className="cod-fields">
+                    <label>
+                      Име и фамилия
+                      <input
+                        required
+                        value={codForm.name}
+                        onChange={(e) => updateCodField("name", e.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Телефон
+                      <input
+                        required
+                        type="tel"
+                        placeholder="08xx xxx xxx"
+                        value={codForm.phone}
+                        onChange={(e) => updateCodField("phone", e.target.value)}
+                      />
+                    </label>
+                    <div className="cod-radio-row">
+                      <label className="cod-radio">
+                        <input
+                          type="radio"
+                          name="deliveryType"
+                          checked={codForm.deliveryType === "address"}
+                          onChange={() => updateCodField("deliveryType", "address")}
+                        />
+                        До адрес
+                      </label>
+                      <label className="cod-radio">
+                        <input
+                          type="radio"
+                          name="deliveryType"
+                          checked={codForm.deliveryType === "office"}
+                          onChange={() => updateCodField("deliveryType", "office")}
+                        />
+                        До офис на Еконт
+                      </label>
                     </div>
-                  ))
-                )}
-              </div>
-              <div className="cart-total">
-                <span>Общо</span>
-                <span className="price">{fmt(cartTotalCents)}</span>
-              </div>
-              <button
-                className="btn btn-gold btn-block"
-                onClick={handleCheckout}
-                disabled={checkingOut || cartLines.length === 0}
-              >
-                {checkingOut ? "Пренасочване…" : "Завърши поръчка"}
-              </button>
-              {checkoutError && <p className="cart-error">{checkoutError}</p>}
+                    <label>
+                      {codForm.deliveryType === "office" ? "Офис на Еконт (град и адрес)" : "Адрес за доставка"}
+                      <input
+                        required
+                        placeholder={
+                          codForm.deliveryType === "office" ? "напр. Варна, офис бул. Владислав Варненчик 1" : "улица, номер, град, пощенски код"
+                        }
+                        value={codForm.address}
+                        onChange={(e) => updateCodField("address", e.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Имейл (по желание)
+                      <input
+                        type="email"
+                        value={codForm.email}
+                        onChange={(e) => updateCodField("email", e.target.value)}
+                      />
+                    </label>
+                  </div>
+                  <button className="btn btn-gold btn-block" type="submit" disabled={codSubmitting}>
+                    {codSubmitting ? "Изпращане…" : "Поръчай с наложен платеж"}
+                  </button>
+                  {codError && <p className="cart-error">{codError}</p>}
+                </form>
+              )}
             </div>
           </div>
         </div>
@@ -473,6 +654,15 @@ export default function Shop({ products }) {
                     Всяка пратка е застрахована и се доставя с подпис — 2–3 работни дни в България,
                     до 7 дни за останала ЕС.
                   </p>
+                </div>
+              </li>
+              <li className="trust-item">
+                <svg>
+                  <use href="#i-card" />
+                </svg>
+                <div>
+                  <h3>Карта или наложен платеж</h3>
+                  <p>Плащате онлайн с карта или в брой на куриера при доставка с Еконт — ти избираш при поръчката.</p>
                 </div>
               </li>
               <li className="trust-item">

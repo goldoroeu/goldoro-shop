@@ -340,6 +340,94 @@ img {
   font-size: 0.82rem;
   margin-top: 8px;
 }
+.cart-back {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+.cart-back:hover {
+  color: var(--gold);
+}
+.method-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+.method-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.method-option:hover {
+  border-color: var(--gold);
+  background: var(--surface-2);
+}
+.method-option:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.method-option svg {
+  width: 22px;
+  height: 22px;
+  color: var(--gold);
+  flex: none;
+}
+.method-option span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.method-option strong {
+  font-size: 0.88rem;
+}
+.method-option small {
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+}
+.cod-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 14px 0;
+}
+.cod-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.cod-fields input {
+  font: inherit;
+  padding: 9px 11px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+}
+.cod-radio-row {
+  display: flex;
+  gap: 16px;
+}
+.cod-radio {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 6px !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+}
+.cod-radio input {
+  width: auto;
+}
 
 /* ---------- hero ---------- */
 .hero {
@@ -921,6 +1009,29 @@ footer {
   border-radius: 8px;
   object-fit: cover;
   display: block;
+}
+.order-status {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+}
+.order-status-pending {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+.order-status-paid,
+.order-status-shipped {
+  color: #3f7a4f;
+  border-color: #3f7a4f;
+}
+.order-status-cancelled {
+  color: var(--garnet);
+  border-color: var(--garnet);
 }
 
 .admin-form {
