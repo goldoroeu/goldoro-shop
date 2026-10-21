@@ -5,19 +5,10 @@ import LogoutButton from "@/components/admin/LogoutButton";
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
-  const { data: products, error } = await supabase()
+  const { data: products } = await supabase()
     .from("products")
     .select("*")
     .order("created_at", { ascending: false });
-
-  if (error) {
-    return (
-      <main className="admin-page">
-        <h1>Продукти</h1>
-        <p className="admin-error">DEBUG: {error.message} (code: {error.code || "n/a"})</p>
-      </main>
-    );
-  }
 
   return (
     <main className="admin-page">
