@@ -3,7 +3,7 @@ import "./globals.css";
 export const metadata = {
   title: "GoldOro — Златни бижута",
   description:
-    "Онлайн магазин за златни гривни, пръстени, ланци и обеци. Проба 585° и 750°, ръчна изработка.",
+    "Онлайн магазин за златни гривни, пръстени, ланци и обеци. Проба 585°, 750° и 916°.",
 };
 
 export default function RootLayout({ children }) {

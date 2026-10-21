@@ -254,13 +254,12 @@ export default function Shop({ products }) {
       <header className="nav">
         <div className="wrap nav-row">
           <a className="logo" href="#top">
-            GoldOro<small>Ателие за злато</small>
+            GoldOro<small>Златни бижута</small>
           </a>
           <nav className={`nav-links${menuOpen ? " open" : ""}`} onClick={() => setMenuOpen(false)}>
             <a href="#categories">Колекции</a>
             <a href="#catalog">Каталог</a>
             <a href="#trust">Гаранции</a>
-            <a href="#atelier">Ателието</a>
             <a href="#contact">Контакти</a>
           </nav>
           <div className="nav-right">
@@ -450,13 +449,13 @@ export default function Shop({ products }) {
         <section className="hero">
           <div className="wrap hero-grid">
             <div>
-              <p className="eyebrow">Проба 585° и 750° &middot; ръчна изработка</p>
+              <p className="eyebrow">Проба 585°, 750° и 916°</p>
               <h1>
                 Злато, което се предава <em>от ръка на ръка.</em>
               </h1>
               <p className="lede">
-                Гривни, пръстени, ланци и обеци, изработени на ръка в нашето ателие в Златоград —
-                всяко изделие с печат на пробата и сертификат за произход.
+                Гривни, пръстени, ланци и обеци с печат на пробата и сертификат за произход —
+                внимателно подбрани за теб.
               </p>
               <div className="hero-ctas">
                 <a className="btn btn-gold" href="#catalog">
@@ -477,7 +476,7 @@ export default function Shop({ products }) {
                   <svg>
                     <use href="#i-truck" />
                   </svg>
-                  Безплатна доставка над €100
+                  Безплатна доставка над €900
                 </li>
                 <li>
                   <svg>
@@ -547,7 +546,7 @@ export default function Shop({ products }) {
           <div className="wrap">
             <div className="section-head">
               <h2>Каталог</h2>
-              <p>Цените са в евро, с включено ДДС. Всяко изделие се предлага с кутия и сертификат.</p>
+              <p>Цените са в евро. Всяко изделие се предлага с кутия и сертификат.</p>
             </div>
             <div className="filters">
               <button
@@ -592,7 +591,14 @@ export default function Shop({ products }) {
                       <h3 className="product-name">{p.name}</h3>
                       <div className="product-meta">
                         <span>{cap(p.category)}</span>
-                        <span>{p.weight}</span>
+                        <span>
+                          {[
+                            p.weight ? `${p.weight} гр.` : null,
+                            p.size ? (p.category === "пръстени" ? `р-р ${p.size}` : `${p.size} см`) : null,
+                          ]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </span>
                       </div>
                       {p.description && (
                         <p style={{ color: "var(--ink-soft)", fontSize: ".85rem" }}>{p.description}</p>
@@ -627,20 +633,8 @@ export default function Shop({ products }) {
                 <div>
                   <h3>Проба и сертификат</h3>
                   <p>
-                    Всяко изделие носи печат на пробата (585‰ или 750‰) и се продава със сертификат
-                    за произход и автентичност.
-                  </p>
-                </div>
-              </li>
-              <li className="trust-item">
-                <svg>
-                  <use href="#i-hammer" />
-                </svg>
-                <div>
-                  <h3>Ръчна изработка в Златоград</h3>
-                  <p>
-                    Отливаме, споявяме и полираме всяко бижу на ръка в нашето ателие — без мащабно
-                    фабрично производство.
+                    Всяко изделие носи печат на пробата (585‰, 750‰ или 916‰) и се продава със
+                    сертификат за произход и автентичност.
                   </p>
                 </div>
               </li>
@@ -680,46 +674,6 @@ export default function Shop({ products }) {
             </ul>
           </div>
         </section>
-
-        <section className="atelier" id="atelier">
-          <div className="wrap">
-            <div className="atelier-inner">
-              <div>
-                <blockquote>
-                  „Всеки пръстен тръгва като кюлче 585° злато и напуска ателието като история, която
-                  някой ще носи с години.“
-                  <cite>Майсторите на GoldOro, Златоград</cite>
-                </blockquote>
-              </div>
-              <div className="atelier-text">
-                <p className="eyebrow">Ателието</p>
-                <h2 style={{ marginTop: "8px" }}>Три поколения златари</h2>
-                <p>
-                  От 1994 година нашето семейно ателие в Златоград топи, кове и полира злато по
-                  традиционни техники, съчетани със съвременен дизайн. Всяко изделие минава през
-                  четири чифта ръце, преди да стигне до вас.
-                </p>
-                <div className="chain-divider" aria-hidden="true">
-                  <svg>
-                    <use href="#i-chain" />
-                  </svg>
-                  <svg>
-                    <use href="#i-chain" />
-                  </svg>
-                  <svg>
-                    <use href="#i-chain" />
-                  </svg>
-                  <svg>
-                    <use href="#i-chain" />
-                  </svg>
-                  <svg>
-                    <use href="#i-chain" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
 
       <footer id="contact">
@@ -727,11 +681,10 @@ export default function Shop({ products }) {
           <div className="foot-grid">
             <div className="foot-brand">
               <a className="logo" href="#top">
-                GoldOro<small>Ателие за злато</small>
+                GoldOro<small>Златни бижута</small>
               </a>
               <p>
-                Ателие за златни бижута в Златоград. Проба 585° и 750°, ръчна изработка, доставка в
-                цяла ЕС.
+                Онлайн магазин за златни бижута. Проба 585°, 750° и 916°, доставка в цяла ЕС.
               </p>
             </div>
             <div className="foot-col">
@@ -749,9 +702,8 @@ export default function Shop({ products }) {
             <div className="foot-col">
               <h4>Контакти</h4>
               <ul>
-                <li>ул. „Златарска“ 12, Златоград</li>
                 <li>+359 88 123 4567</li>
-                <li>атeлие@goldoro.bg</li>
+                <li>контакти@goldoro.eu</li>
               </ul>
             </div>
             <div className="foot-col">
@@ -770,10 +722,10 @@ export default function Shop({ products }) {
           </div>
           <div className="legal">
             <p>
-              Проба показва съдържанието на чисто злато в сплавта: 585‰ отговаря на 14К, а 750‰ — на
-              18К злато. Теглото на всяко изделие е посочено индивидуално в каталога.
+              Проба показва съдържанието на чисто злато в сплавта: 585‰ отговаря на 14К, 750‰ — на
+              18К, а 916‰ — на 22К злато. Теглото на всяко изделие е посочено индивидуално в каталога.
             </p>
-            <p>© 2026 GoldOro Ателие. Всички права запазени.</p>
+            <p>© 2026 GoldOro. Всички права запазени.</p>
           </div>
         </div>
       </footer>

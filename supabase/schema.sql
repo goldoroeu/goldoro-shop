@@ -9,6 +9,7 @@ create table if not exists products (
   category text not null check (category in ('гривни', 'пръстени', 'ланци', 'обеци')),
   proba text not null default '585°',
   weight text,
+  size text,
   description text,
   price_cents integer not null,
   image_url text,

@@ -13,6 +13,7 @@ export default function ProductForm({ product }) {
   const [category, setCategory] = useState(product?.category || CATEGORIES[0]);
   const [proba, setProba] = useState(product?.proba || "585°");
   const [weight, setWeight] = useState(product?.weight || "");
+  const [size, setSize] = useState(product?.size || "");
   const [description, setDescription] = useState(product?.description || "");
   const [price, setPrice] = useState(product ? String(product.price_cents / 100) : "");
   const [imageUrl, setImageUrl] = useState(product?.image_url || "");
@@ -45,7 +46,7 @@ export default function ProductForm({ product }) {
     e.preventDefault();
     setSaving(true);
     setError("");
-    const payload = { name, category, proba, weight, description, price, image_url: imageUrl, in_stock: inStock };
+    const payload = { name, category, proba, weight, size, description, price, image_url: imageUrl, in_stock: inStock };
     const res = await fetch(isEdit ? `/api/admin/products/${product.id}` : "/api/admin/products", {
       method: isEdit ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
@@ -95,15 +96,16 @@ export default function ProductForm({ product }) {
         <label>
           Проба
           <select value={proba} onChange={(e) => setProba(e.target.value)}>
-            <option value="585°">585°</option>
-            <option value="750°">750°</option>
+            <option value="585°">585° (14К)</option>
+            <option value="750°">750° (18К)</option>
+            <option value="916°">916° (22К)</option>
           </select>
         </label>
       </div>
 
       <div className="admin-form-row">
         <label>
-          Тегло (напр. 3.4 г)
+          Тегло в грамове (напр. 3.4)
           <input value={weight} onChange={(e) => setWeight(e.target.value)} />
         </label>
         <label>
@@ -118,6 +120,13 @@ export default function ProductForm({ product }) {
           />
         </label>
       </div>
+
+      {category !== "обеци" && (
+        <label>
+          {category === "пръстени" ? "Размер (ЕС номер, напр. 54)" : "Размер (см, напр. 18)"}
+          <input value={size} onChange={(e) => setSize(e.target.value)} />
+        </label>
+      )}
 
       <label>
         Описание

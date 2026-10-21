@@ -3,13 +3,14 @@ import { supabase } from "@/lib/supabase";
 
 export async function PUT(req, { params }) {
   const body = await req.json().catch(() => ({}));
-  const { name, category, proba, weight, description, price, image_url, in_stock } = body;
+  const { name, category, proba, weight, size, description, price, image_url, in_stock } = body;
 
   const update = {};
   if (name !== undefined) update.name = name;
   if (category !== undefined) update.category = category;
   if (proba !== undefined) update.proba = proba;
   if (weight !== undefined) update.weight = weight || null;
+  if (size !== undefined) update.size = size || null;
   if (description !== undefined) update.description = description || null;
   if (image_url !== undefined) update.image_url = image_url || null;
   if (in_stock !== undefined) update.in_stock = in_stock;

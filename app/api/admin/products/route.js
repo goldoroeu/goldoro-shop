@@ -13,7 +13,7 @@ export async function GET() {
 
 export async function POST(req) {
   const body = await req.json().catch(() => ({}));
-  const { name, category, proba, weight, description, price, image_url, in_stock } = body;
+  const { name, category, proba, weight, size, description, price, image_url, in_stock } = body;
 
   if (!name || !category || price === undefined || price === null || price === "") {
     return NextResponse.json({ error: "Име, категория и цена са задължителни." }, { status: 400 });
@@ -31,6 +31,7 @@ export async function POST(req) {
       category,
       proba: proba || "585°",
       weight: weight || null,
+      size: size || null,
       description: description || null,
       price_cents: priceCents,
       image_url: image_url || null,
