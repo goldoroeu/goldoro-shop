@@ -1,4 +1,4 @@
-# GoldOro — онлайн магазин
+# Gold'Oro — онлайн магазин
 
 Витрина с количка, истински Stripe checkout и админ панел за управление на продукти (име, цена, описание, снимки).
 
@@ -41,7 +41,7 @@
 ```bash
 git init
 git add .
-git commit -m "GoldOro shop"
+git commit -m "Gold'Oro shop"
 ```
 
 Качи го в GitHub (създай празно repo в github.com, после):

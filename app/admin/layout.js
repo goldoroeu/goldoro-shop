@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "GoldOro — Админ панел",
+  title: "Gold'Oro — Админ панел",
 };
 
 export default function AdminLayout({ children }) {

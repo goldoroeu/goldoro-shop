@@ -263,7 +263,7 @@ export default function Shop({ products }) {
               <use href="#i-logo" />
             </svg>
             <span>
-              GoldOro<small>Златни бижута</small>
+              Gold'Oro<small>Златни бижута</small>
             </span>
           </a>
           <nav className={`nav-links${menuOpen ? " open" : ""}`} onClick={() => setMenuOpen(false)}>
@@ -633,7 +633,7 @@ export default function Shop({ products }) {
         <section className="trust" id="trust">
           <div className="wrap">
             <div className="section-head">
-              <h2>Защо GoldOro</h2>
+              <h2>Защо Gold'Oro</h2>
             </div>
             <ul className="trust-list">
               <li className="trust-item">
@@ -676,7 +676,7 @@ export default function Shop({ products }) {
                 <div>
                   <h3>Безплатно полиране</h3>
                   <p>
-                    Веднъж годишно почистваме и полираме безплатно всяко бижу, купено от GoldOro —
+                    Веднъж годишно почистваме и полираме безплатно всяко бижу, купено от Gold'Oro —
                     докато го носите.
                   </p>
                 </div>
@@ -695,7 +695,7 @@ export default function Shop({ products }) {
                   <use href="#i-logo" />
                 </svg>
                 <span>
-                  GoldOro<small>Златни бижута</small>
+                  Gold'Oro<small>Златни бижута</small>
                 </span>
               </a>
               <p>
@@ -740,7 +740,7 @@ export default function Shop({ products }) {
               Проба показва съдържанието на чисто злато в сплавта: 585‰ отговаря на 14К, 750‰ — на
               18К, а 916‰ — на 22К злато. Теглото на всяко изделие е посочено индивидуално в каталога.
             </p>
-            <p>© 2026 GoldOro. Всички права запазени.</p>
+            <p>© 2026 Gold'Oro. Всички права запазени.</p>
           </div>
         </div>
       </footer>

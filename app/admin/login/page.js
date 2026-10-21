@@ -31,7 +31,7 @@ export default function AdminLoginPage() {
   return (
     <main className="admin-login">
       <form className="admin-login-card" onSubmit={handleSubmit}>
-        <p className="eyebrow">GoldOro</p>
+        <p className="eyebrow">Gold'Oro</p>
         <h1>Вход в админ панела</h1>
         <label htmlFor="password">Парола</label>
         <input
