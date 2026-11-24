@@ -114,7 +114,7 @@ export default function Shop({ products }) {
               </h1>
               <p className="lede">
                 Гривни, пръстени, колиета и обеци с печат на пробата и сертификат за произход —
-                внимателно подбрани за вас.
+                внимателно подбрани за Вас.
               </p>
               <div className="hero-ctas">
                 <a className="btn btn-gold" href="#catalog">
@@ -126,7 +126,7 @@ export default function Shop({ products }) {
                   <svg>
                     <use href="#i-tag" />
                   </svg>
-                  Цена на злато 14К - €96/грам
+                  Цена на злато 14К - 96€/грам
                 </li>
                 <li>
                   <svg>
