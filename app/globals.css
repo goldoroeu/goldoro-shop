@@ -1,16 +1,29 @@
 :root {
-  --bg: #e8e4dd;
-  --surface: #ffffff;
-  --surface-2: #f1eee7;
-  --ink: #1c1a17;
-  --ink-soft: #6e675e;
-  --gold: #9c7a3e;
+  --bg: #ede7d6;
+  --surface: #fbf8ef;
+  --surface-2: #f3edda;
+  --ink: #2a2117;
+  --ink-soft: #6b5d49;
+  --gold: #8c6a2e;
   --gold-bright: #b9873f;
-  --garnet: #6b1f2a;
-  --garnet-bright: #842834;
-  --line: #dcd7cd;
-  --shadow: 0 1px 2px rgba(28, 26, 23, 0.05), 0 10px 24px -14px rgba(28, 26, 23, 0.18);
-  color-scheme: light;
+  --garnet: #7a2e35;
+  --line: #d9cfb8;
+  --shadow: 0 1px 2px rgba(42, 33, 23, 0.06), 0 10px 24px -14px rgba(42, 33, 23, 0.28);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a130e;
+    --surface: #241b13;
+    --surface-2: #2c2117;
+    --ink: #f2e6d2;
+    --ink-soft: #c3ae8c;
+    --gold: #d9ae67;
+    --gold-bright: #efc888;
+    --garnet: #d98a90;
+    --line: #3b2c1d;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 14px 30px -16px rgba(0, 0, 0, 0.6);
+  }
 }
 
 * {
@@ -59,7 +72,7 @@ img {
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--garnet);
+  color: var(--gold);
   font-weight: 700;
 }
 .price {
@@ -97,11 +110,11 @@ img {
   transition: transform 0.12s, box-shadow 0.12s, background 0.15s, color 0.15s;
 }
 .btn-gold {
-  background: var(--garnet);
-  color: #fff;
+  background: var(--gold);
+  color: var(--surface);
 }
 .btn-gold:hover {
-  background: var(--garnet-bright);
+  background: var(--gold-bright);
   transform: translateY(-1px);
 }
 .btn-gold:disabled {
@@ -189,7 +202,7 @@ img {
 .nav-links a:hover,
 .nav-links a:focus-visible {
   color: var(--ink);
-  border-color: var(--garnet);
+  border-color: var(--gold);
 }
 .nav-right {
   display: flex;
@@ -293,7 +306,7 @@ img {
   transition: border-color 0.15s, background 0.15s;
 }
 .method-option:hover {
-  border-color: var(--garnet);
+  border-color: var(--gold);
   background: var(--surface-2);
 }
 .method-option:disabled {
@@ -301,13 +314,13 @@ img {
   cursor: not-allowed;
 }
 .method-option.active {
-  border-color: var(--garnet);
+  border-color: var(--gold);
   background: var(--surface-2);
 }
 .method-option svg {
   width: 22px;
   height: 22px;
-  color: var(--garnet);
+  color: var(--gold);
   flex: none;
 }
 .method-option span {
@@ -411,7 +424,7 @@ img {
 .trust-row svg {
   width: 16px;
   height: 16px;
-  color: var(--garnet);
+  color: var(--gold);
   flex: none;
 }
 
@@ -474,13 +487,13 @@ img {
   transition: border-color 0.15s, transform 0.15s;
 }
 .cat-card:hover {
-  border-color: var(--garnet);
+  border-color: var(--gold);
   transform: translateY(-2px);
 }
 .cat-card svg {
   width: 34px;
   height: 34px;
-  color: var(--garnet);
+  color: var(--gold);
 }
 .cat-card .cat-name {
   font-family: "Playfair Display", serif;
@@ -529,7 +542,7 @@ img {
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 .chip:hover {
-  border-color: var(--garnet);
+  border-color: var(--gold);
 }
 .chip.active {
   background: var(--ink);
@@ -563,7 +576,7 @@ img {
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .product:hover {
-  border-color: var(--garnet);
+  border-color: var(--gold);
   box-shadow: var(--shadow);
 }
 .product-link {
@@ -637,7 +650,7 @@ img {
   transition: background 0.15s;
 }
 .add-btn:hover {
-  background: var(--garnet);
+  background: var(--gold);
 }
 .add-btn.added {
   background: var(--garnet);
@@ -668,7 +681,7 @@ img {
 .trust-item svg {
   width: 30px;
   height: 30px;
-  color: var(--garnet);
+  color: var(--gold);
 }
 .trust-item h3 {
   font-size: 1.1rem;
@@ -677,6 +690,61 @@ img {
 .trust-item p {
   color: var(--ink-soft);
   max-width: 60ch;
+}
+
+/* ---------- atelier ---------- */
+.atelier {
+  padding: 16px 0 70px;
+}
+.atelier-inner {
+  background: var(--surface-2);
+  border-radius: 26px;
+  padding: clamp(32px, 6vw, 64px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+@media (max-width: 820px) {
+  .atelier-inner {
+    grid-template-columns: 1fr;
+  }
+}
+.atelier blockquote {
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  line-height: 1.4;
+  border-left: 3px solid var(--gold);
+  padding-left: 22px;
+  margin: 0;
+}
+.atelier cite {
+  display: block;
+  font-family: "PT Sans", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 16px;
+}
+.atelier-text p {
+  color: var(--ink-soft);
+  margin-top: 14px;
+}
+.chain-divider {
+  display: flex;
+  gap: 4px;
+  margin-top: 26px;
+  color: var(--gold);
+  opacity: 0.8;
+}
+.chain-divider svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* ---------- footer ---------- */
@@ -721,7 +789,7 @@ footer {
   transition: color 0.15s;
 }
 .foot-col a:hover {
-  color: var(--garnet);
+  color: var(--gold);
 }
 .subscribe {
   display: flex;
@@ -740,12 +808,12 @@ footer {
   font-size: 0.86rem;
 }
 .subscribe input:focus-visible {
-  outline: 2px solid var(--garnet);
+  outline: 2px solid var(--gold);
   outline-offset: 1px;
 }
 .subscribe-note {
   font-size: 0.8rem;
-  color: var(--garnet);
+  color: var(--gold);
   margin-top: 8px;
   min-height: 1.1em;
 }
@@ -880,7 +948,7 @@ footer {
   border-bottom: none;
 }
 .admin-table a {
-  color: var(--garnet);
+  color: var(--gold);
   font-weight: 700;
 }
 .admin-thumb {
@@ -992,7 +1060,7 @@ footer {
   color: var(--ink-soft);
 }
 .back-link:hover {
-  color: var(--garnet);
+  color: var(--gold);
 }
 .checkout-page {
   padding: 44px 0 90px;
@@ -1107,7 +1175,7 @@ footer {
   transition: border-color 0.15s;
 }
 .cl-qty button:hover:not(:disabled) {
-  border-color: var(--garnet);
+  border-color: var(--gold);
 }
 .cl-qty button:disabled {
   opacity: 0.35;
@@ -1225,7 +1293,7 @@ footer {
   display: inline-block;
   margin-top: 14px;
   font-weight: 700;
-  color: var(--garnet);
+  color: var(--gold);
 }
 .pdp-cart-link:hover {
   text-decoration: underline;
