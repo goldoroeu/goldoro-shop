@@ -158,30 +158,7 @@ export default function Shop({ products }) {
               </ul>
             </div>
             <div className="hero-panel" aria-hidden="true">
-              <svg className="hp-art" viewBox="0 0 520 420">
-                <g fill="none" stroke="var(--jv-gold)" strokeWidth="3">
-                  <circle cx="162" cy="246" r="62" />
-                  <polygon points="162,150 182,184 142,184" fill="var(--jv-gold)" stroke="none" />
-                  <ellipse cx="368" cy="118" rx="84" ry="38" />
-                  <circle cx="288" cy="118" r="4.5" fill="var(--jv-gold)" stroke="none" />
-                  <circle cx="448" cy="118" r="4.5" fill="var(--jv-gold)" stroke="none" />
-                  <circle cx="332" cy="84" r="4.5" fill="var(--jv-gold)" stroke="none" />
-                  <circle cx="404" cy="84" r="4.5" fill="var(--jv-gold)" stroke="none" />
-                  <circle cx="332" cy="152" r="4.5" fill="var(--jv-gold)" stroke="none" />
-                  <circle cx="404" cy="152" r="4.5" fill="var(--jv-gold)" stroke="none" />
-                  <g strokeWidth="2.5" opacity=".9">
-                    <ellipse cx="378" cy="252" rx="26" ry="38" transform="rotate(24 378 252)" />
-                    <ellipse cx="420" cy="288" rx="26" ry="38" transform="rotate(-18 420 288)" />
-                    <ellipse cx="460" cy="330" rx="26" ry="38" transform="rotate(24 460 330)" />
-                  </g>
-                  <circle cx="92" cy="332" r="17" strokeWidth="2.5" />
-                  <line x1="92" y1="349" x2="92" y2="372" strokeWidth="2.5" />
-                  <path
-                    d="M92 372c-14 0-19 11-16 20 3 8 11 13 16 13s13-5 16-13c3-9-2-20-16-20Z"
-                    strokeWidth="2.5"
-                  />
-                </g>
-              </svg>
+              <img className="hp-photo" src="/hero.jpg" alt="" />
               <p className="hp-label">
                 Колекция <b>Есен 2026</b> &middot; 585° злато
               </p>
