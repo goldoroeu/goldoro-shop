@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const CATEGORIES = ["гривни", "пръстени", "ланци", "обеци"];
+const PRICE_RATE_KEY = "goldoro_admin_price_per_gram";
 
 export default function ProductForm({ product }) {
   const router = useRouter();
@@ -18,6 +19,31 @@ export default function ProductForm({ product }) {
   const [price, setPrice] = useState(product ? String(product.price_cents / 100) : "");
   const [imageUrl, setImageUrl] = useState(product?.image_url || "");
   const [inStock, setInStock] = useState(product?.in_stock ?? true);
+  const [pricePerGram, setPricePerGram] = useState("89");
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(PRICE_RATE_KEY);
+      if (saved) setPricePerGram(saved);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(PRICE_RATE_KEY, pricePerGram);
+    } catch {
+      /* ignore */
+    }
+  }, [pricePerGram]);
+
+  const weightNum = parseFloat(weight);
+  const rateNum = parseFloat(pricePerGram);
+  const suggestedPrice =
+    Number.isFinite(weightNum) && Number.isFinite(rateNum) && weightNum > 0 && rateNum > 0
+      ? (weightNum * rateNum).toFixed(2)
+      : null;
 
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -109,17 +135,43 @@ export default function ProductForm({ product }) {
           <input value={weight} onChange={(e) => setWeight(e.target.value)} />
         </label>
         <label>
-          Цена (€)
+          Цена на грам (€)
           <input
             type="number"
             min="0"
             step="0.01"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
+            value={pricePerGram}
+            onChange={(e) => setPricePerGram(e.target.value)}
           />
         </label>
       </div>
+
+      <div className="admin-calc-row">
+        {suggestedPrice ? (
+          <>
+            <span>
+              Предложена цена: <strong>€{suggestedPrice}</strong> ({weight} гр. &times; €{pricePerGram}/гр.)
+            </span>
+            <button type="button" className="btn btn-outline btn-sm" onClick={() => setPrice(suggestedPrice)}>
+              Приложи
+            </button>
+          </>
+        ) : (
+          <span className="admin-hint">Въведи тегло, за да изчисля предложена цена.</span>
+        )}
+      </div>
+
+      <label>
+        Цена (€)
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+        />
+      </label>
 
       {category !== "обеци" && (
         <label>

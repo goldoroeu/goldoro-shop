@@ -1015,6 +1015,22 @@ footer {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+.admin-calc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: -6px;
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.admin-calc-row strong {
+  color: var(--gold);
+}
 .admin-checkbox {
   flex-direction: row !important;
   align-items: center;
