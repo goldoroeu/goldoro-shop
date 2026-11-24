@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const CATEGORIES = ["гривни", "пръстени", "ланци", "обеци"];
+const CATEGORIES = ["гривни", "пръстени", "колиета", "обеци"];
 const PRICE_RATE_KEY = "goldoro_admin_price_per_gram";
 
 export default function ProductForm({ product }) {
@@ -12,7 +12,7 @@ export default function ProductForm({ product }) {
 
   const [name, setName] = useState(product?.name || "");
   const [category, setCategory] = useState(product?.category || CATEGORIES[0]);
-  const [proba, setProba] = useState(product?.proba || "585°");
+  const [proba, setProba] = useState(product?.proba || "585");
   const [weight, setWeight] = useState(product?.weight || "");
   const [size, setSize] = useState(product?.size || "");
   const [description, setDescription] = useState(product?.description || "");
@@ -122,9 +122,9 @@ export default function ProductForm({ product }) {
         <label>
           Проба
           <select value={proba} onChange={(e) => setProba(e.target.value)}>
-            <option value="585°">585° (14К)</option>
-            <option value="750°">750° (18К)</option>
-            <option value="916°">916° (22К)</option>
+            <option value="585">585 (14К)</option>
+            <option value="750">750 (18К)</option>
+            <option value="916">916 (22К)</option>
           </select>
         </label>
       </div>

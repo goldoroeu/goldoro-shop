@@ -9,7 +9,7 @@ import { fmt, cap } from "@/lib/format";
 const CATEGORIES = [
   { key: "гривни", icon: "i-bracelet" },
   { key: "пръстени", icon: "i-ring" },
-  { key: "ланци", icon: "i-chain" },
+  { key: "колиета", icon: "i-chain" },
   { key: "обеци", icon: "i-earring" },
 ];
 
@@ -108,12 +108,12 @@ export default function Shop({ products }) {
         <section className="hero">
           <div className="wrap hero-grid">
             <div>
-              <p className="eyebrow">Проба 585°, 750° и 916°</p>
+              <p className="eyebrow">Проба 585, 750 и 916</p>
               <h1>
                 Злато, което се предава <em>от ръка на ръка.</em>
               </h1>
               <p className="lede">
-                Гривни, пръстени, ланци и обеци с печат на пробата и сертификат за произход —
+                Гривни, пръстени, колиета и обеци с печат на пробата и сертификат за произход —
                 внимателно подбрани за теб.
               </p>
               <div className="hero-ctas">
@@ -129,7 +129,7 @@ export default function Shop({ products }) {
                   <svg>
                     <use href="#i-tag" />
                   </svg>
-                  Цена на златото: €96/грам
+                  Цена на златото (14К): €96/грам
                 </li>
                 <li>
                   <svg>
@@ -160,7 +160,7 @@ export default function Shop({ products }) {
             <div className="hero-panel" aria-hidden="true">
               <img className="hp-photo" src="/hero.jpg" alt="" />
               <p className="hp-label">
-                Колекция <b>Есен 2026</b> &middot; 585° злато
+                Колекция <b>Есен 2026</b> &middot; 585 злато
               </p>
             </div>
           </div>
@@ -339,7 +339,7 @@ export default function Shop({ products }) {
                 </span>
               </a>
               <p>
-                Онлайн магазин за златни бижута. Проба 585°, 750° и 916°, доставка в цяла ЕС.
+                Онлайн магазин за златни бижута. Проба 585, 750 и 916, доставка в цяла ЕС.
               </p>
             </div>
             <div className="foot-col">

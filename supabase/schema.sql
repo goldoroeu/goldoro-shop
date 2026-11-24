@@ -6,8 +6,8 @@ create extension if not exists pgcrypto;
 create table if not exists products (
   id uuid primary key default gen_random_uuid(),
   name text not null,
-  category text not null check (category in ('гривни', 'пръстени', 'ланци', 'обеци')),
-  proba text not null default '585°',
+  category text not null check (category in ('гривни', 'пръстени', 'колиета', 'обеци')),
+  proba text not null default '585',
   weight text,
   size text,
   description text,

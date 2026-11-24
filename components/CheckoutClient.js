@@ -6,7 +6,7 @@ import IconSprite from "@/components/IconSprite";
 import { fmt, cap } from "@/lib/format";
 
 const CART_KEY = "goldoro_cart_v1";
-const ICONS = { гривни: "i-bracelet", пръстени: "i-ring", ланци: "i-chain", обеци: "i-earring" };
+const ICONS = { гривни: "i-bracelet", пръстени: "i-ring", колиета: "i-chain", обеци: "i-earring" };
 
 export default function CheckoutClient({ products }) {
   const router = useRouter();

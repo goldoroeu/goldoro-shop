@@ -29,7 +29,7 @@ export async function POST(req) {
     .insert({
       name,
       category,
-      proba: proba || "585°",
+      proba: proba || "585",
       weight: weight || null,
       size: size || null,
       description: description || null,
