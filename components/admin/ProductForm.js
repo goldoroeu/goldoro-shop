@@ -103,6 +103,11 @@ export default function ProductForm({ product }) {
 
   return (
     <form className="admin-form" onSubmit={handleSubmit}>
+      {isEdit && (
+        <p className="admin-hint">
+          Каталожен номер: <strong>{product.catalog_number}</strong> (задава се автоматично)
+        </p>
+      )}
       <label>
         Име на продукта
         <input value={name} onChange={(e) => setName(e.target.value)} required />

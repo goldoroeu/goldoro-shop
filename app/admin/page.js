@@ -32,6 +32,7 @@ export default async function AdminDashboard() {
           <table className="admin-table">
             <thead>
               <tr>
+                <th>№</th>
                 <th></th>
                 <th>Име</th>
                 <th>Категория</th>
@@ -44,6 +45,7 @@ export default async function AdminDashboard() {
             <tbody>
               {products.map((p) => (
                 <tr key={p.id}>
+                  <td>{p.catalog_number}</td>
                   <td>{p.image_url ? <img className="admin-thumb" src={p.image_url} alt="" /> : null}</td>
                   <td>{p.name}</td>
                   <td>{p.category}</td>

@@ -127,7 +127,9 @@ export default function ProductDetail({ product }) {
           )}
 
           <div className="pdp-info">
-            <p className="eyebrow">{cap(product.category)}</p>
+            <p className="eyebrow">
+              {cap(product.category)} &middot; Арт. № {product.catalog_number}
+            </p>
             <h1>{product.name}</h1>
             {metaLine && <p className="pdp-meta">{metaLine}</p>}
             <p className="pdp-price">{fmt(product.price_cents)}</p>

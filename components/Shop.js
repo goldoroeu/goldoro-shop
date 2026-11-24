@@ -235,6 +235,7 @@ export default function Shop({ products }) {
                           <span className="proba-badge">{p.proba}</span>
                         </div>
                         <h3 className="product-name">{p.name}</h3>
+                        <p className="product-sku">Арт. № {p.catalog_number}</p>
                         <div className="product-meta">
                           <span>{cap(p.category)}</span>
                           <span>
