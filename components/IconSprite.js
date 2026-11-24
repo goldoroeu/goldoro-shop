@@ -80,6 +80,16 @@ export default function IconSprite() {
         <line x1="12" y1="5" x2="12" y2="19" strokeLinecap="round" />
         <line x1="5" y1="12" x2="19" y2="12" strokeLinecap="round" />
       </symbol>
+      <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <line x1="6" y1="6" x2="18" y2="18" strokeLinecap="round" />
+        <line x1="18" y1="6" x2="6" y2="18" strokeLinecap="round" />
+      </symbol>
+      <symbol id="i-zoom" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <circle cx="10.5" cy="10.5" r="6.5" />
+        <line x1="15.2" y1="15.2" x2="20" y2="20" strokeLinecap="round" />
+        <line x1="10.5" y1="7.5" x2="10.5" y2="13.5" strokeLinecap="round" />
+        <line x1="7.5" y1="10.5" x2="13.5" y2="10.5" strokeLinecap="round" />
+      </symbol>
     </svg>
   );
 }

@@ -13,6 +13,16 @@ export default function ProductDetail({ product }) {
   const [cart, setCart] = useState({});
   const [loaded, setLoaded] = useState(false);
   const [added, setAdded] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    function handleKey(e) {
+      if (e.key === "Escape") setLightboxOpen(false);
+    }
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [lightboxOpen]);
 
   useEffect(() => {
     try {
@@ -77,16 +87,44 @@ export default function ProductDetail({ product }) {
 
       <main className="pdp-page">
         <div className="wrap pdp-grid">
-          <div className="pdp-media">
+          <button
+            type="button"
+            className="pdp-media"
+            onClick={() => product.image_url && setLightboxOpen(true)}
+            aria-label={product.image_url ? "Увеличи снимката" : undefined}
+          >
             {product.image_url ? (
-              <img src={product.image_url} alt={product.name} />
+              <>
+                <img src={product.image_url} alt={product.name} />
+                <span className="pdp-zoom-hint">
+                  <svg>
+                    <use href="#i-zoom" />
+                  </svg>
+                </span>
+              </>
             ) : (
               <svg>
                 <use href={`#${icon}`} />
               </svg>
             )}
             <span className="proba-badge">{product.proba}</span>
-          </div>
+          </button>
+
+          {lightboxOpen && product.image_url && (
+            <div className="lightbox" onClick={() => setLightboxOpen(false)}>
+              <button
+                type="button"
+                className="lightbox-close"
+                aria-label="Затвори"
+                onClick={() => setLightboxOpen(false)}
+              >
+                <svg>
+                  <use href="#i-close" />
+                </svg>
+              </button>
+              <img src={product.image_url} alt={product.name} onClick={(e) => e.stopPropagation()} />
+            </div>
+          )}
 
           <div className="pdp-info">
             <p className="eyebrow">{cap(product.category)}</p>
