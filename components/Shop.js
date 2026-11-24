@@ -129,7 +129,7 @@ export default function Shop({ products }) {
                   <svg>
                     <use href="#i-tag" />
                   </svg>
-                  Цена на златото (14К): €96/грам
+                  Цена на злато (14К): €96/грам
                 </li>
                 <li>
                   <svg>
