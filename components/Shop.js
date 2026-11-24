@@ -127,6 +127,12 @@ export default function Shop({ products }) {
               <ul className="trust-row">
                 <li>
                   <svg>
+                    <use href="#i-tag" />
+                  </svg>
+                  Цена на златото: €96/грам
+                </li>
+                <li>
+                  <svg>
                     <use href="#i-shield" />
                   </svg>
                   Сертификат за автентичност

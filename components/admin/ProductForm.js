@@ -19,7 +19,7 @@ export default function ProductForm({ product }) {
   const [price, setPrice] = useState(product ? String(product.price_cents / 100) : "");
   const [imageUrl, setImageUrl] = useState(product?.image_url || "");
   const [inStock, setInStock] = useState(product?.in_stock ?? true);
-  const [pricePerGram, setPricePerGram] = useState("89");
+  const [pricePerGram, setPricePerGram] = useState("96");
 
   useEffect(() => {
     try {
