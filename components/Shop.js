@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import IconSprite from "@/components/IconSprite";
 import { fmt, cap } from "@/lib/format";
 
@@ -242,31 +243,33 @@ export default function Shop({ products }) {
                   const icon = CATEGORIES.find((c) => c.key === p.category)?.icon || "i-ring";
                   return (
                     <article className="product" key={p.id}>
-                      <div className="product-media">
-                        {p.image_url ? (
-                          <img src={p.image_url} alt={p.name} />
-                        ) : (
-                          <svg>
-                            <use href={`#${icon}`} />
-                          </svg>
+                      <Link href={`/product/${p.id}`} className="product-link">
+                        <div className="product-media">
+                          {p.image_url ? (
+                            <img src={p.image_url} alt={p.name} />
+                          ) : (
+                            <svg>
+                              <use href={`#${icon}`} />
+                            </svg>
+                          )}
+                          <span className="proba-badge">{p.proba}</span>
+                        </div>
+                        <h3 className="product-name">{p.name}</h3>
+                        <div className="product-meta">
+                          <span>{cap(p.category)}</span>
+                          <span>
+                            {[
+                              p.weight ? `${p.weight} гр.` : null,
+                              p.size ? (p.category === "пръстени" ? `р-р ${p.size}` : `${p.size} см`) : null,
+                            ]
+                              .filter(Boolean)
+                              .join(" · ")}
+                          </span>
+                        </div>
+                        {p.description && (
+                          <p style={{ color: "var(--ink-soft)", fontSize: ".85rem" }}>{p.description}</p>
                         )}
-                        <span className="proba-badge">{p.proba}</span>
-                      </div>
-                      <h3 className="product-name">{p.name}</h3>
-                      <div className="product-meta">
-                        <span>{cap(p.category)}</span>
-                        <span>
-                          {[
-                            p.weight ? `${p.weight} гр.` : null,
-                            p.size ? (p.category === "пръстени" ? `р-р ${p.size}` : `${p.size} см`) : null,
-                          ]
-                            .filter(Boolean)
-                            .join(" · ")}
-                        </span>
-                      </div>
-                      {p.description && (
-                        <p style={{ color: "var(--ink-soft)", fontSize: ".85rem" }}>{p.description}</p>
-                      )}
+                      </Link>
                       <div className="product-foot">
                         <span className="price">{fmt(p.price_cents)}</span>
                         <button
