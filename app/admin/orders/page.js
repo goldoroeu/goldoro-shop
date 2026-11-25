@@ -28,6 +28,7 @@ export default async function OrdersPage() {
           <table className="admin-table">
             <thead>
               <tr>
+                <th>№</th>
                 <th>Дата</th>
                 <th>Метод</th>
                 <th>Клиент</th>
@@ -41,6 +42,7 @@ export default async function OrdersPage() {
             <tbody>
               {orders.map((o) => (
                 <tr key={o.id}>
+                  <td>{o.order_number}</td>
                   <td>{new Date(o.created_at).toLocaleString("bg-BG")}</td>
                   <td>{PAYMENT_LABELS[o.payment_method] || o.payment_method}</td>
                   <td>
@@ -62,7 +64,11 @@ export default async function OrdersPage() {
                     )}
                   </td>
                   <td>€{((o.amount_total || 0) / 100).toLocaleString("bg-BG")}</td>
-                  <td>{(o.items || []).map((it) => `${it.quantity}× ${it.name}`).join(", ")}</td>
+                  <td>
+                    {(o.items || [])
+                      .map((it) => `${it.quantity}× ${it.name}${it.catalog_number ? ` (№${it.catalog_number})` : ""}`)
+                      .join(", ")}
+                  </td>
                   <td>
                     <OrderStatusSelect orderId={o.id} status={o.status || "pending"} />
                   </td>

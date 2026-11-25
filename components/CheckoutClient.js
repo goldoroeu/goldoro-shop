@@ -108,7 +108,7 @@ export default function CheckoutClient({ products }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Грешка при изпращане на поръчката.");
       setCart({});
-      router.push("/checkout/cod-success");
+      router.push(`/checkout/cod-success?order=${data.orderNumber}`);
     } catch (err) {
       setCodError(err.message || "Грешка при изпращане на поръчката.");
     } finally {

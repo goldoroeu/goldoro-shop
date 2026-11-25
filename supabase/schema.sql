@@ -20,6 +20,7 @@ create table if not exists products (
 
 create table if not exists orders (
   id uuid primary key default gen_random_uuid(),
+  order_number integer generated always as identity (start with 7643),
   payment_method text not null default 'card' check (payment_method in ('card', 'cod')),
   status text not null default 'pending' check (status in ('pending', 'paid', 'shipped', 'cancelled')),
   stripe_session_id text unique,

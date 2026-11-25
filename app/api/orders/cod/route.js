@@ -34,7 +34,12 @@ export async function POST(req) {
       const product = products.find((p) => p.id === item.id);
       if (!product || !product.in_stock) return null;
       const qty = Math.max(1, Math.min(10, Number(item.qty) || 1));
-      return { name: product.name, quantity: qty, amount_total: product.price_cents * qty };
+      return {
+        name: product.name,
+        catalog_number: product.catalog_number,
+        quantity: qty,
+        amount_total: product.price_cents * qty,
+      };
     })
     .filter(Boolean);
 
@@ -66,6 +71,7 @@ export async function POST(req) {
 
   await sendTelegramMessage(
     formatOrderMessage({
+      orderNumber: order.order_number,
       paymentMethod: "cod",
       status: "pending",
       customerName: name,
@@ -78,5 +84,5 @@ export async function POST(req) {
     })
   );
 
-  return NextResponse.json({ ok: true, orderId: order.id });
+  return NextResponse.json({ ok: true, orderId: order.id, orderNumber: order.order_number });
 }

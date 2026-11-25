@@ -16,7 +16,10 @@ export async function POST(req) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-    const lineItems = await stripe().checkout.sessions.listLineItems(session.id, { limit: 100 });
+    const lineItems = await stripe().checkout.sessions.listLineItems(session.id, {
+      limit: 100,
+      expand: ["data.price.product"],
+    });
 
     const shippingAddress = session.shipping_details?.address;
     const addressLine = shippingAddress
@@ -27,6 +30,7 @@ export async function POST(req) {
 
     const orderItems = lineItems.data.map((li) => ({
       name: li.description,
+      catalog_number: li.price?.product?.metadata?.catalog_number || null,
       quantity: li.quantity,
       amount_total: li.amount_total,
     }));
@@ -57,6 +61,7 @@ export async function POST(req) {
     if (inserted) {
       await sendTelegramMessage(
         formatOrderMessage({
+          orderNumber: inserted.order_number,
           paymentMethod: "card",
           status: "paid",
           customerName: inserted.customer_name,

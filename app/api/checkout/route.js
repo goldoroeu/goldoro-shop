@@ -32,6 +32,7 @@ export async function POST(req) {
             name: product.name,
             description: `Проба ${product.proba}${product.weight ? " · " + product.weight : ""}`,
             images: product.image_url ? [product.image_url] : undefined,
+            metadata: { catalog_number: String(product.catalog_number) },
           },
         },
       };
