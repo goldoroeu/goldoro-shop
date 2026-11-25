@@ -17,8 +17,8 @@ export async function POST(req) {
   const address = (customer?.address || "").trim();
   const email = (customer?.email || "").trim();
 
-  if (!name || !phone || !city || !address) {
-    return NextResponse.json({ error: "Име, телефон, град и адрес/офис са задължителни." }, { status: 400 });
+  if (!name || !phone || !city || !address || !email) {
+    return NextResponse.json({ error: "Име, телефон, имейл, град и адрес/офис са задължителни." }, { status: 400 });
   }
 
   const ids = items.map((i) => i.id);

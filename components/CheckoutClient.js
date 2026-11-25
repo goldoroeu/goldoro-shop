@@ -306,8 +306,9 @@ export default function CheckoutClient({ products }) {
                       />
                     </label>
                     <label>
-                      Имейл (по желание)
+                      Имейл
                       <input
+                        required
                         type="email"
                         value={codForm.email}
                         onChange={(e) => updateCodField("email", e.target.value)}
