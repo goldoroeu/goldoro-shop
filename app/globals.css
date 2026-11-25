@@ -15,6 +15,9 @@
 * {
   box-sizing: border-box;
 }
+html {
+  scroll-behavior: smooth;
+}
 html,
 body {
   margin: 0;
@@ -70,6 +73,9 @@ img {
   padding: 0 28px;
 }
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   * {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
@@ -458,6 +464,7 @@ img {
 /* ---------- categories ---------- */
 .categories {
   padding: 12px 0 48px;
+  scroll-margin-top: 88px;
 }
 .cat-grid {
   display: grid;
@@ -519,6 +526,7 @@ img {
 /* ---------- catalog ---------- */
 .catalog {
   padding: 20px 0 64px;
+  scroll-margin-top: 88px;
 }
 .filters {
   display: flex;
@@ -666,6 +674,7 @@ img {
 /* ---------- trust ---------- */
 .trust {
   padding: 12px 0 64px;
+  scroll-margin-top: 88px;
 }
 .trust-list {
   border-top: 1px solid var(--line);
@@ -751,6 +760,7 @@ img {
 footer {
   padding: 56px 0 36px;
   border-top: 1px solid var(--line);
+  scroll-margin-top: 88px;
 }
 .foot-grid {
   display: grid;
