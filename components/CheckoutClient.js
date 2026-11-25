@@ -19,6 +19,7 @@ export default function CheckoutClient({ products }) {
     name: "",
     phone: "",
     deliveryType: "address",
+    city: "",
     address: "",
     email: "",
   });
@@ -283,13 +284,22 @@ export default function CheckoutClient({ products }) {
                       </label>
                     </div>
                     <label>
-                      {codForm.deliveryType === "office" ? "Офис на Еконт (град и адрес)" : "Адрес за доставка"}
+                      Град
+                      <input
+                        required
+                        placeholder="напр. София"
+                        value={codForm.city}
+                        onChange={(e) => updateCodField("city", e.target.value)}
+                      />
+                    </label>
+                    <label>
+                      {codForm.deliveryType === "office" ? "Офис на Еконт" : "Адрес за доставка"}
                       <input
                         required
                         placeholder={
                           codForm.deliveryType === "office"
-                            ? "напр. Варна, офис бул. Владислав Варненчик 1"
-                            : "улица, номер, град, пощенски код"
+                            ? "напр. офис бул. Владислав Варненчик 1"
+                            : "улица, номер, пощенски код"
                         }
                         value={codForm.address}
                         onChange={(e) => updateCodField("address", e.target.value)}

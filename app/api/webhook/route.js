@@ -34,6 +34,7 @@ export async function POST(req) {
           customer_name: session.customer_details?.name || session.shipping_details?.name || null,
           customer_email: session.customer_details?.email || null,
           customer_phone: session.customer_details?.phone || null,
+          city: shippingAddress?.city || null,
           shipping_address: addressLine,
           amount_total: session.amount_total,
           currency: session.currency,

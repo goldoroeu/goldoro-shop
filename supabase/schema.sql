@@ -27,6 +27,7 @@ create table if not exists orders (
   customer_email text,
   customer_phone text,
   delivery_type text check (delivery_type in ('address', 'office')),
+  city text,
   shipping_address text,
   amount_total integer,
   currency text default 'eur',

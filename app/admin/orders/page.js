@@ -31,6 +31,7 @@ export default async function OrdersPage() {
                 <th>Дата</th>
                 <th>Метод</th>
                 <th>Клиент</th>
+                <th>Град</th>
                 <th>Доставка</th>
                 <th>Сума</th>
                 <th>Артикули</th>
@@ -46,6 +47,9 @@ export default async function OrdersPage() {
                     {o.customer_name && <div>{o.customer_name}</div>}
                     {o.customer_phone && <div className="admin-hint">{o.customer_phone}</div>}
                     {o.customer_email && <div className="admin-hint">{o.customer_email}</div>}
+                  </td>
+                  <td>
+                    <strong>{o.city || "—"}</strong>
                   </td>
                   <td>
                     {o.shipping_address ? (

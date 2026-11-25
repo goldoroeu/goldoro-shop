@@ -12,11 +12,12 @@ export async function POST(req) {
   const name = (customer?.name || "").trim();
   const phone = (customer?.phone || "").trim();
   const deliveryType = customer?.deliveryType === "office" ? "office" : "address";
+  const city = (customer?.city || "").trim();
   const address = (customer?.address || "").trim();
   const email = (customer?.email || "").trim();
 
-  if (!name || !phone || !address) {
-    return NextResponse.json({ error: "Име, телефон и адрес/офис са задължителни." }, { status: 400 });
+  if (!name || !phone || !city || !address) {
+    return NextResponse.json({ error: "Име, телефон, град и адрес/офис са задължителни." }, { status: 400 });
   }
 
   const ids = items.map((i) => i.id);
@@ -51,6 +52,7 @@ export async function POST(req) {
       customer_email: email || null,
       customer_phone: phone,
       delivery_type: deliveryType,
+      city,
       shipping_address: address,
       amount_total: amountTotal,
       currency: "eur",
