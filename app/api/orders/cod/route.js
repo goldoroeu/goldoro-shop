@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { sendTelegramMessage, formatOrderMessage } from "@/lib/telegram";
 
 export async function POST(req) {
   const body = await req.json().catch(() => ({}));
@@ -62,6 +63,20 @@ export async function POST(req) {
     .single();
 
   if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 });
+
+  await sendTelegramMessage(
+    formatOrderMessage({
+      paymentMethod: "cod",
+      status: "pending",
+      customerName: name,
+      customerPhone: phone,
+      city,
+      address,
+      items: orderItems,
+      amountTotal,
+      currency: "eur",
+    })
+  );
 
   return NextResponse.json({ ok: true, orderId: order.id });
 }

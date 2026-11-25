@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { supabase } from "@/lib/supabase";
+import { sendTelegramMessage, formatOrderMessage } from "@/lib/telegram";
 
 export async function POST(req) {
   const sig = req.headers.get("stripe-signature");
@@ -24,7 +25,13 @@ export async function POST(req) {
           .join(", ")
       : null;
 
-    await supabase()
+    const orderItems = lineItems.data.map((li) => ({
+      name: li.description,
+      quantity: li.quantity,
+      amount_total: li.amount_total,
+    }));
+
+    const { data: inserted } = await supabase()
       .from("orders")
       .upsert(
         {
@@ -38,14 +45,30 @@ export async function POST(req) {
           shipping_address: addressLine,
           amount_total: session.amount_total,
           currency: session.currency,
-          items: lineItems.data.map((li) => ({
-            name: li.description,
-            quantity: li.quantity,
-            amount_total: li.amount_total,
-          })),
+          items: orderItems,
         },
         { onConflict: "stripe_session_id", ignoreDuplicates: true }
+      )
+      .select()
+      .maybeSingle();
+
+    // Ако реда вече съществуваше (повторен webhook от Stripe), insert е пропуснат
+    // и тук data е null — не пращаме известие повторно за същата поръчка.
+    if (inserted) {
+      await sendTelegramMessage(
+        formatOrderMessage({
+          paymentMethod: "card",
+          status: "paid",
+          customerName: inserted.customer_name,
+          customerPhone: inserted.customer_phone,
+          city: inserted.city,
+          address: inserted.shipping_address,
+          items: orderItems,
+          amountTotal: session.amount_total,
+          currency: session.currency,
+        })
       );
+    }
   }
 
   return NextResponse.json({ received: true });
