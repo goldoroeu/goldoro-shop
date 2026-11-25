@@ -33,7 +33,12 @@ export async function PUT(req, { params }) {
     await sendEmail({
       to: data.customer_email,
       subject: `Поръчка №${data.order_number} е изпратена — Gold'Oro`,
-      html: shippedEmailHtml({ orderNumber: data.order_number, customerName: data.customer_name }),
+      html: shippedEmailHtml({
+        orderNumber: data.order_number,
+        customerName: data.customer_name,
+        items: data.items,
+        amountTotal: data.amount_total,
+      }),
     });
   }
 
